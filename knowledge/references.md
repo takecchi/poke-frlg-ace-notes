@@ -4,16 +4,18 @@
 
 - Pomeg Letterbombers - FRLG Introduction: https://pomeg-letterbombers.github.io/pokemon-ace-notes/frlg-introduction/
 - Pomeg Letterbombers - JPN FRLG ACE: https://pomeg-letterbombers.github.io/pokemon-ace-notes/jpn-frlg-ace-explanation/
+- Pomeg Letterbombers - JPN Main Route: https://pomeg-letterbombers.github.io/pokemon-ace-notes/frlg-jpn-main-route/
 - Pomeg Letterbombers - Non-JPN Pre-E4 Route: https://pomeg-letterbombers.github.io/pokemon-ace-notes/frlg-non-jpn-pre-e4-route/
 - Pomeg Letterbombers - Mail Glitch: https://pomeg-letterbombers.github.io/pokemon-ace-notes/mail-glitch/
 - Pomeg Letterbombers - Box14 Exit Code: https://pomeg-letterbombers.github.io/pokemon-ace-notes/frlg-box-14-exit/
 - Pomeg Letterbombers - Hexwriter: https://pomeg-letterbombers.github.io/pokemon-ace-notes/frlg-hex-writer/
 - Pomeg Letterbombers - Hexwriter Setup: https://pomeg-letterbombers.github.io/pokemon-ace-notes/frlg-hexwriter-setup-explanation/
+- Pomeg Letterbombers - FAQ (Switch版トラブルシューティング含む): https://pomeg-letterbombers.github.io/pokemon-ace-notes/faq/
 - Theocatic FRLG ACE (GitHub Gist): https://gist.github.com/Theocatic/39ed337ecd590b47fad14f791cf16bb5
 
 ## ツール
 
-- FRLG ACE Code Generator: https://e-sh4rk.github.io/CodeGenerator/index_frlg.html
+- FRLG ACE Code Generator (GBA版のみ対応): https://e-sh4rk.github.io/CodeGenerator/index_frlg.html
 - ACE Generator Docs: https://e-sh4rk.github.io/CodeGenerator/doc/index.html
 
 ## Wiki・百科事典
@@ -39,8 +41,19 @@
 ## 日本語資料
 
 - ポケモンWiki 任意コード実行: https://wiki.xn--rckteqa2e.com/wiki/%E4%BB%BB%E6%84%8F%E3%82%B3%E3%83%BC%E3%83%89%E5%AE%9F%E8%A1%8C
-- ぞの FRLG ACE便利コード集: https://note.com/nozotasmacguide/n/n03e1def2a39a
-- flag3 FRLG殿堂入りACE: https://flag3.github.io/blog/posts/hall-of-fame-in-firered-leafgreen/
+- ぞの FRLG ACE便利コード集 (GBA版専用、Switch版未対応): https://note.com/nozotasmacguide/n/n03e1def2a39a
+- flag3 FRLG殿堂入りACE (Switch版対応コードあり): https://flag3.github.io/blog/posts/hall-of-fame-in-firered-leafgreen/
 - えたきち 色違いデオキシス生成: https://blog.bzl-web.com/entry/2019/09/20/010108
 - 改造ポケモン制作資料Wiki 文字コード: https://wikiwiki.jp/pokemonhack/%E6%96%87%E5%AD%97%E3%82%B3%E3%83%BC%E3%83%89
 - ポケモナンザ メールバグ解明: https://pokemonza.hatenablog.jp/entry/2026/03/05/225805
+
+## Switch版データマイン・ニュース
+
+- Serebii FRLG Switch Additions: https://www.serebii.net/fireredleafgreen/nintendoswitch.shtml
+- NintendoReporters FRLG Code Reveals: https://www.nintendoreporters.com/en/news/nintendo-switch-2/pokemon-firered-and-leafgreen-what-the-code-reveals-about-the-emulator-telemetry-and-new-rom-builds/
+- Nintendo Everything ほえるバグ修正: https://nintendoeverything.com/pokemon-firered-leafgreen-switch-roar-bug-fixed/
+
+## 主要貢献者SNS
+
+- デテロニー氏 (Switch版メールバグ初期報告): https://x.com/detelony
+- アダン氏 (Switch版ACE拡散): https://x.com/GEN4pomeg
