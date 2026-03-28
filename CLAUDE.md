@@ -1,0 +1,22 @@
+# FRLG ACE Knowledge Base
+
+このディレクトリはポケットモンスター ファイアレッド・リーフグリーン（FRLG）の任意コード実行（ACE）に関する知識ベースである。
+
+## Claudeへの指示
+
+- ACEに関する質問や作業を求められた場合、`knowledge/` 配下のファイルを参照せよ
+- アドレス情報は必ず「GBA版」と「Switch版」を区別して回答せよ。Switch版が不明の場合はその旨を明示すること
+- ユーザーが新しい情報を提供した場合、該当する `knowledge/` ファイルを更新せよ
+- Switch版のアドレスが判明した場合、`**不明**` を実際の値に置き換えよ
+
+## 知識ファイル一覧
+
+| ファイル | 内容 |
+|---------|------|
+| `knowledge/memory_map.md` | GBAメモリマップ、IWRAM/EWRAMアドレス、gPokemonStorage構造体 |
+| `knowledge/ace_methods.md` | ACE発動方法（メールバグ、つかむ/いれかえACE、HOCKルート） |
+| `knowledge/box_name_coding.md` | ボックス名コーディング、文字制約、Hex Writer、ペイロードアーキテクチャ |
+| `knowledge/arm7tdmi.md` | ARM/Thumb命令セット、暗号化、PRNG |
+| `knowledge/platform_diff.md` | GBA版とSwitch版の差異 |
+| `knowledge/payloads.md` | 具体的なACEペイロード実例 |
+| `knowledge/references.md` | 外部参考リンク集 |
