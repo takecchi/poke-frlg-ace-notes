@@ -37,7 +37,53 @@ ACE用グリッチポケモン作成の基礎exploit。
 4. 性格値変遷: 0x00000000 → 0x1E000000 → 0x20000000 (GBA版 / Switch版: **不明**)
 5. 種族計算: hpEV + (atkEV × 256) = 0x0351 (GBA版 / Switch版: **不明**)
 
-## 日本語版: グリッチ種族0xFFC9
+## 日本語版: ニドくんチャート (0xFFC9セットアップ)
 
-日本語版はグリッチ種族0xFFC9でThumbモードACE発動。
-エントリーポイント: Box12 Slot29付近 (GBA版 / Switch版: **不明**)
+おせけん氏(@vs_prof_oak)が解説。pomeg-letterbombersでは "Japanese ACE Setup: ニドくん Route" として記載。
+
+### 材料ポケモン
+ニドラン♂(NN:ニドくん): 5番道路地下通路入口でNPC交換で入手。
+PID固定=0x4C970B9E, TID=63184 → 乱数調整不要。
+
+### 手順
+
+1. ニドくんをふしぎなアメでLv9(経験値419) → 育て屋に預けて74歩 → 引き取ると経験値493
+2. ニドくんをBox3 Slot1に配置
+3. メールバグ(はたきおとす+リサイクル)でQMM生成
+4. メール書き込み: メールスロット255がBox3 Slot1の40バイト目(growthサブストラクチャのspecies)を上書き
+   - 経験値493の場合: 3番目の言葉=「レベル」、5番目の言葉=削除
+5. ニドくんが中間グリッチ種族に変化 → 通称「天元」(元ニドくん)
+6. ボックス名コード(Box1〜5)を設定し、ならべかえモードで掴む→入れ替え×2→あずけるモードに切替
+7. → 手持ちにグリッチ種族0xFFC9が生成される
+
+### 0xFFC9の詳細
+- 表示名: LG=「みみぅむぅ」、FR=「むぅァいァい」
+- 性別: メス、Lv0
+- ACE発動モード: Thumbモード
+- エントリーポイント: 0x0203027F付近 (Box12 Slot29付近)
+- 以降、ボックス名にペイロードを書いて0xFFC9を入れ替えるだけでACE繰り返し実行可能
+
+### 0xFFC9セットアップ用ボックス名 (Box1〜5)
+
+GBA版:
+```
+Box 1: リ び … ｏ く ＿ ゼ ｎ
+Box 2: ＿ … ｔ ま ＿ １ ｔ ほ
+Box 3: ぁ ｍ ＿ ＿ あ い
+Box 4: ア Ｂ ぢ い い Ｎ
+Box 5: Ｏ
+```
+
+Switch版 (1.0.0):
+```
+Box 1: リ び … ｏ く ＿ ゼ ｎ
+Box 2: ＿ … ｔ ま ＿ １ ｔ ほ
+Box 3: ぁ ｍ ＿ ＿ あ い
+Box 4: ア ／ ぢ い い Ｎ  ← Ｂ→／ に変更
+Box 5: Ｏ
+```
+
+### 参考
+- おせけん動画: https://www.youtube.com/watch?v=1b2hJQ1ErPk
+- pomeg-letterbombers ニドくんRoute: https://pomeg-letterbombers.github.io/pokemon-ace-notes/frlg-jpn-nido-route/
+- pomeg-letterbombers Main Route: https://pomeg-letterbombers.github.io/pokemon-ace-notes/frlg-jpn-main-route/
