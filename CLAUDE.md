@@ -21,3 +21,4 @@
 | `knowledge/payloads.md` | 具体的なACEペイロード実例 |
 | `knowledge/glitch_species_calc.md` | グリッチ種族生成の計算方法、文字エンコーディング表 |
 | `knowledge/references.md` | 外部参考リンク集 |
+| `knowledge/script_commands.md` | スクリプトコマンドopcode、Special関数インデックス、フラグ定義 |
