@@ -82,28 +82,13 @@ Box1の名前を変更し、みみぅむぅ(0xFFC9)の入れ替えを実行す�
 | `ゆたあらい` | 25 10 01 27 02 | 殿堂入り (special 0x0110 EnterHallOfFame + waitstate + end) |
 | `であ空テ空い` | 44 01 00 63 00 02 | マスターボール99個 (additem 0x0001 qty=99 + end) |
 
-#### 2回実行スクリプト (ボックス閉じずに連続実行)
-
-| 1回目 Box1 | 2回目 Box1 | 1回目バイト列 | 2回目バイト列 | 結果 |
-|-----------|-----------|-------------|-------------|------|
-| `♀バ空ば空空い` | `ゆぎあらい` | B6 96 00 46 00 00 02 | 25 38 01 27 02 | ミュウツーLv70と野生戦 |
-
-**実行手順**: Box1に1回目を入力→入れ替え実行→**ボックスを閉じずに**→Box1に2回目を入力→入れ替え実行→ボックスを閉じる
-
-**原理**: setwildbattle(0xB6)で野生戦データをメモリにセットした後、special StartLegendaryBattle(0x0138)で戦闘開始。dowildbattle(0xB7)が入力不可のため、2回に分けて実行する。setwildbattleのデータはメモリに残るため、連続実行で戦闘が成立する。
-
-**任意ポケモンの計算方法**:
-1. `species_ids.md` から種族の内部インデックスを調べる
-2. 1回目 Box1: `♀ [species_lo文字] [species_hi文字] [level文字] [item_lo文字] [item_hi文字] い`
-   - `B6 [species:2 LE] [level:1] [item:2 LE] 02`
-   - アイテム不要なら `空空` (0x0000)
-3. 2回目 Box1: `ゆぎあらい` (固定: special StartLegendaryBattle + waitstate + end)
-
 #### Box1→Box2連結スクリプト
 
 | Box1の名前 | Box2の名前 | Box1バイト列 | Box2バイト列 | 結果 |
 |-----------|-----------|-------------|-------------|------|
 | `あああああじうき` | `あ空あ空` | 01 01 01 01 01 3D 03 07 | 01 00 01 00 | セキチクシティにテレポート |
+| `ああああ♀バ空ば` | `空ゆぎあらい` | 01 01 01 01 B6 96 00 46 | 00 25 38 01 27 02 | ミュウツーLv70と野生戦 |
+| `ああああ♀ねあお` | `空ゆぎあらい` | 01 01 01 01 B6 18 01 05 | 00 25 38 01 27 02 | アチャモLv5と野生戦 |
 
 ※ `空` = 空白文字 (FRLGには漢字がないため、空白を「空」と表記する)
 
@@ -134,6 +119,29 @@ Box2: 01 00  01 00
 
 warpId=0xFFはゲーム内部で「デフォルトの着地点を使用」として扱われる。
 
+#### 任意ポケモンとの野生戦 (nop×4ブリッジ、検証済み)
+
+setwildbattle(0xB6) + special StartLegendaryBattle(0x0138)をBox1→Box2ブリッジで1回実行。
+nop×4でパディングし、setwildbattleのitem_lo(5番目パラメータ)が0xFF終端に来るよう配置:
+
+```
+Box1: 01 01 01 01  B6      [sp_lo] [sp_hi] [level]
+      nop×4        swb     species(LE)      lv
+                                                    [0xFF = item_lo]
+Box2: 00    25      [idx_lo] [idx_hi]  27       02
+      itm_hi special(0x0138)           waitstate end
+```
+
+item = 0x00FF(有効なアイテムID)。ポケモンの持ち物になるだけで戦闘に影響なし。
+
+**重要: nop×3ではなくnop×4を使うこと。** nop×3だとitem_hi=0xFF→item=0xFF00(無効)でエラーになる。
+
+**任意ポケモンの計算方法**:
+1. `species_ids.md` から種族の内部インデックスを調べる
+2. Box1: `ああああ♀ [species_lo文字] [species_hi文字] [level文字]`
+   - `01 01 01 01 B6 [species:2 LE] [level:1]`
+3. Box2: `空ゆぎあらい` (固定: item_hi=0 + special 0x0138 + waitstate + end)
+
 #### 任意の場所へのテレポート計算方法
 
 1. `game_constants.md` から目的地の mapGroup と mapNum を調べる
@@ -142,20 +150,22 @@ warpId=0xFFはゲーム内部で「デフォルトの着地点を使用」とし
 4. x座標(2バイトLE) + y座標(2バイトLE) = Box2 (4文字)
 5. 座標が不明な場合はx=1,y=1(あ空あ空)で試す
 
-#### 未検証・失敗記録
+#### 失敗→解決記録
 
-| Box1の名前 | Box2の名前 | 意図 | 結果 |
-|-----------|-----------|------|------|
-| `あああ♀バ空ば空` | `ゆぎあらい` | setwildbattle+StartLegendaryBattle(ミュウツー戦) | エラー |
+| Box1の名前 | Box2の名前 | 意図 | 結果 | 原因 |
+|-----------|-----------|------|------|------|
+| `あああ♀バ空ば空` | `ゆぎあらい` | setwildbattle+StartLegendaryBattle(ミュウツー戦) | エラー | nop×3 → item_hi=0xFF → item=0xFF00(範囲外) |
 
-setwildbattle(0xB6)のitemパラメータに0xFFが入る構成だが、StartLegendaryBattleとの組み合わせでは動作しなかった。
+**解決**: nop×4にすることで0xFFがitem_loの位置に来る。item=0x00FF(255, 範囲内)となり正常動作。
+- nop×3: item = item_lo(0x00) | item_hi(**0xFF**) = **0xFF00** → 無効なアイテムID → エラー
+- nop×4: item = item_lo(**0xFF**) | item_hi(0x00) = **0x00FF** → 有効なアイテムID → 成功
 
 ### 制約
 
 - ゲーム内蔵スクリプトの呼び出しに限定される
 - 任意の機械語実行 (PRNG操作、PID書き換え等) はこの環境では不可
 - Box1単体: 8バイトまで。Box2連結: パラメータで0xFFを跨ぐ必要あり
-- dowildbattle(0xB7)は入力不可バイトのため直接実行不可 → 2回実行方式で回避可能
+- dowildbattle(0xB7)は入力不可バイトのため直接実行不可 → nop×4ブリッジ方式で回避(setwildbattle+StartLegendaryBattle)
 - 色違い生成にはHexwriter等のより高度なセットアップが必要
 
 ### 参考
@@ -230,10 +240,11 @@ PRNG定数: 乗数=0x41C64E6D, 加数=0x00006073
 5. 殿堂入り (ゆたあらい: special 0x0110 + waitstate + end) → 動作確認済み (2026-03)
 6. マスターボール99個 (であ空テ空い: additem 0x0001 qty=99 + end) → 動作確認済み (2026-03)
    - 注意: パラメータ省略(であ空い=4バイト)だと不正な数量になる。6バイト必須
-7. 任意ポケモンとの野生戦 (2回実行方式: setwildbattle + StartLegendaryBattle) → ミュウツーLv70で動作確認済み (2026-03)
-   - dowildbattle(0xB7)が入力不可のため、setwildbattleとStartLegendaryBattleを2回に分けて実行
-   - ボックスを閉じずに連続でBox1名変更→入れ替えを2回行うことで成功
-   - Box1→Box2ブリッジ方式(1回実行)はエラーで失敗したが、2回実行方式で解決
+7. 任意ポケモンとの野生戦 (nop×4ブリッジ: setwildbattle + StartLegendaryBattle) → ミュウツーLv70・アチャモLv5で動作確認済み (2026-03)
+   - dowildbattle(0xB7)が入力不可のため、setwildbattle+StartLegendaryBattleをBox1→Box2ブリッジで実行
+   - nop×4で配置し、item_lo=0xFF(有効ID)としてブリッジ成功
+   - nop×3(item_hi=0xFF→item=0xFF00)はエラー。nop×4(item_lo=0xFF→item=0x00FF)で解決
+   - ホウエンポケモン(species>0xFF)もブリッジ方式で正常動作を確認
 8. 色違い生成 → 未着手 (汎用コード環境では不可、Hexwriter等が必要)
 
 ## 非日本語版: Hex Writer汎用ペイロード

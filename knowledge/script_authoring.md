@@ -17,10 +17,12 @@
 | お金追加 | addmoney (0x90) | 6 |
 | タマゴ入手 | giveegg (0x7A) | 3 |
 | 技変更 | setmonmove (0x7B) | 5 |
-| 野生戦準備 | setwildbattle (0xB6) | 6 |
-| 野生戦開始 | special StartLegendaryBattle | 5 (2回目固定: `ゆぎあらい`) |
+| 野生戦 | setwildbattle (0xB6) + StartLegendaryBattle | Box1→Box2ブリッジ(nop×4) |
 
-> **野生戦は2回実行方式**: dowildbattle(0xB7)が入力不可のため、1回目にsetwildbattleでデータ設定、2回目にspecial StartLegendaryBattleで戦闘開始。ボックスを閉じずに連続実行する。
+> **野生戦はnop×4ブリッジ方式**: dowildbattle(0xB7)が入力不可のため、setwildbattle+special StartLegendaryBattleをBox1→Box2ブリッジで1回実行する。
+> - Box1: `ああああ♀ [species_lo] [species_hi] [level]` (nop×4 + setwildbattle + params)
+> - Box2: `空ゆぎあらい` (固定: item_hi=0 + special 0x0138 + waitstate + end)
+> - 0xFF終端がitem_loに来るため、item=0x00FF(有効ID)となりエラーを回避。**nop×3はitem=0xFF00で失敗するので使わないこと。**
 
 ### Step 2: パラメータのバイト列を組み立てる
 
