@@ -22,3 +22,7 @@
 | `knowledge/glitch_species_calc.md` | グリッチ種族生成の計算方法、文字エンコーディング表 |
 | `knowledge/references.md` | 外部参考リンク集 |
 | `knowledge/script_commands.md` | スクリプトコマンドopcode、Special関数インデックス、フラグ定義 |
+| `knowledge/item_ids.md` | アイテムID一覧（10進・16進）、ボール・HM・TM・きのみ・どうぐ全375種 |
+| `knowledge/game_constants.md` | 技ID全355種、マップID（グループ:番号形式）全マップ、ヒールロケーションID（setrespawn用） |
+| `knowledge/species_ids.md` | ポケモン内部種族番号一覧（全411種+アンノーン）、入力不可バイト該当種族 |
+| `knowledge/script_authoring.md` | スクリプト作成手順書（コマンド選択→バイト組立→文字変換→Box名設定） |
