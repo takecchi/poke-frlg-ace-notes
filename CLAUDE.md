@@ -19,4 +19,5 @@
 | `knowledge/arm7tdmi.md` | ARM/Thumb命令セット、暗号化、PRNG |
 | `knowledge/platform_diff.md` | GBA版とSwitch版の差異 |
 | `knowledge/payloads.md` | 具体的なACEペイロード実例 |
+| `knowledge/glitch_species_calc.md` | グリッチ種族生成の計算方法、文字エンコーディング表 |
 | `knowledge/references.md` | 外部参考リンク集 |
