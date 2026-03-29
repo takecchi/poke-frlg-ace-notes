@@ -17,6 +17,10 @@
 | お金追加 | addmoney (0x90) | 6 |
 | タマゴ入手 | giveegg (0x7A) | 3 |
 | 技変更 | setmonmove (0x7B) | 5 |
+| 野生戦準備 | setwildbattle (0xB6) | 6 |
+| 野生戦開始 | special StartLegendaryBattle | 5 (2回目固定: `ゆぎあらい`) |
+
+> **野生戦は2回実行方式**: dowildbattle(0xB7)が入力不可のため、1回目にsetwildbattleでデータ設定、2回目にspecial StartLegendaryBattleで戦闘開始。ボックスを閉じずに連続実行する。
 
 ### Step 2: パラメータのバイト列を組み立てる
 
