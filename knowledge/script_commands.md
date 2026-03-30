@@ -298,7 +298,7 @@ ACEでスクリプトバイトコードを直接構築する際の参考資料�
 | 0x0840 | FLAG_SYS_NATIONAL_DEX | 全国図鑑有効 | `29 40 08` |
 | 0x0845 | FLAG_SYS_SEVII_MAP_123 | ナナシマ1-3解放 | `29 45 08` |
 | 0x0846 | FLAG_SYS_SEVII_MAP_4567 | ナナシマ4-7解放 | `29 46 08` |
-| 0x0848 | FLAG_SYS_DEOXYS_AWAKENED | デオキシス覚醒 | `29 48 08` |
+| 0x0848 | FLAG_SYS_DEOXYS_AWAKENED | デオキシス覚醒 (※パズル完了時に自動セット。このフラグだけsetflagしてもパズルは完了しない。VAR_DEOXYS_INTERACTION_NUM=10が必要) | `29 48 08` |
 | 0x0849 | FLAG_SYS_UNLOCKED_TANOBY_RUINS | アスカナ遺跡解放 | `29 49 08` |
 
 ### 3.3 一時システムフラグ (0x800-0x808)
@@ -361,7 +361,16 @@ ACEでスクリプトバイトコードを直接構築する際の参考資料�
 | 0x02A9 | FLAG_RECEIVED_OLD_SEA_MAP |
 | 0x02F4 | FLAG_OAK_SAW_DEX_COMPLETION |
 
-### 3.7 テンポラリフラグ (0x00-0x1F)
+### 3.7 重要変数 (setvar/getvar で使用)
+
+`setvar` (0x16) で使用。バイト列: `16 [var_lo] [var_hi] [val_lo] [val_hi]`
+
+| 変数ID | 名前 | 説明 |
+|--------|------|------|
+| 0x403E | VAR_DEOXYS_INTERACTION_NUM | デオキシス三角パズル進行度 (0〜10、10で完了→デオキシス出現) |
+| 0x4026 | VAR_DEOXYS_INTERACTION_STEP_COUNTER | デオキシスパズル歩数カウンタ |
+
+### 3.8 テンポラリフラグ (0x00-0x1F)
 
 マップ切り替えごとにクリアされる。NPC会話制御や一時的な障害物に使用。
 `FLAG_TEMP_1` (0x01) ~ `FLAG_TEMP_1F` (0x1F)
@@ -423,7 +432,20 @@ Box 1: 2A BC 02 02 xx xx xx xx
         clearflag FLAG_FOUGHT_MEWTWO / end
 ```
 
-### 4.8 お金MAX (999999 = 0x000F423F)
+### 4.8 デオキシス再戦準備 (実機検証済み: Switch版LG, 2026-03)
+```
+Box 1: にずぞこ空れｐい
+        16 3E 40 0A 00 2A E4 02
+        setvar VAR_DEOXYS_INTERACTION_NUM(0x403E) = 10 / clearflag FLAG_FOUGHT_DEOXYS(0x02E4) / end(※clearflagの後、Box終端0xFFの次バイト0x02=endとして解釈)
+```
+に=0x16(setvar), ず=0x3E, ぞ=0x40, こ=0x0A(=10), 空=0x00, れ=0x2A(clearflag), ｐ=0xE4, い=0x02(end)
+
+パズル完了状態(VAR=10)をセットしつつ戦闘済みフラグをクリア。
+`ぐいぎ空`(warp たんじょうのしま)と組み合わせてデオキシスを何度でも捕獲可能。
+
+**注意**: FLAG_SYS_DEOXYS_AWAKENED(0x0848)のsetflagだけではパズルは完了しない。パズル進行はVAR_DEOXYS_INTERACTION_NUM(0x403E)で管理されており、値=10で完了。
+
+### 4.9 お金MAX (999999 = 0x000F423F)
 ```
 Box 1: 90 3F 42 0F 00 00 02 xx
         addmoney 999999 disable=0 / end
