@@ -36,3 +36,4 @@
 | 15 | B | `レゼ空い` | — | カビゴンの卵 (giveegg 0x008F) | ✅ | giveegg |
 | 16 | B | `レゴあい` | — | タツベイの卵 (giveegg 0x018B) | ✅ | giveegg |
 | 17 | B | `レズあい` | — | ダンバルの卵 (giveegg 0x018E) | ✅ | giveegg |
+| 18 | B | `ゆＨ空らい` | — | 手持ち1番目の卵を即孵化 | ✅ | special EggHatch(0x00C2) + waitstate + end |

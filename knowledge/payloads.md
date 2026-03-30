@@ -97,6 +97,7 @@ Box1の名前を変更し、みみぅむぅ(0xFFC9)の入れ替えを実行す�
 | `であ空テ空い` | 44 01 00 63 00 02 | マスターボール99個 (additem 0x0001 qty=99 + end) | ✅ |
 | `にずぞこ空れｐい` | 16 3E 40 0A 00 2A E4 02 | デオキシス再戦準備: パズル完了(setvar 0x403E=10) + 戦闘済みクリア(clearflag 0x02E4) | ✅ |
 | `レ[sp_lo][sp_hi]い` | 7A [sp_lo] [sp_hi] 02 | タマゴ入手 (giveegg) | ✅ |
+| `ゆＨ空らい` | 25 C2 00 27 02 | 手持ち1番目の卵を即孵化 (special EggHatch + waitstate + end) | ✅ |
 
 #### Box1単体: giveegg汎用計算
 
