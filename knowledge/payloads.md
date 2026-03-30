@@ -96,6 +96,18 @@ Box1の名前を変更し、みみぅむぅ(0xFFC9)の入れ替えを実行す�
 | `ゆたあらい` | 25 10 01 27 02 | 殿堂入り (special 0x0110 EnterHallOfFame + waitstate + end) | ✅ |
 | `であ空テ空い` | 44 01 00 63 00 02 | マスターボール99個 (additem 0x0001 qty=99 + end) | ✅ |
 | `にずぞこ空れｐい` | 16 3E 40 0A 00 2A E4 02 | デオキシス再戦準備: パズル完了(setvar 0x403E=10) + 戦闘済みクリア(clearflag 0x02E4) | ✅ |
+| `レ[sp_lo][sp_hi]い` | 7A [sp_lo] [sp_hi] 02 | タマゴ入手 (giveegg) | ✅ |
+
+#### Box1単体: giveegg汎用計算
+
+```
+giveegg: 7A [species_lo] [species_hi] 02(end)
+         レ  species(LE)              い
+```
+
+1. `species_ids.md` から種族の内部インデックスを調べる
+2. Box1: `レ [species_lo文字] [species_hi文字] い`
+3. 入れ替えで手持ちに卵が追加される
 
 #### Box1単体: warp簡潔パターン
 
