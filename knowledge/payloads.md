@@ -307,7 +307,11 @@ PRNG定数: 乗数=0x41C64E6D, 加数=0x00006073
    - `にずぞこ空れｐい` (setvar VAR_DEOXYS_INTERACTION_NUM=10 + clearflag FLAG_FOUGHT_DEOXYS) → パズル完了+再戦可能
    - `ぐいぎ空` (warp たんじょうのしま, warpId=0) → 港出口にドア移動で着地
    - FLAG_SYS_DEOXYS_AWAKENED(0x0848)のsetflagだけではパズルは完了しない(検証済み)
-9. 色違い生成 → 未着手 (汎用コード環境では不可、Hexwriter等が必要)
+9. 色違い生成 → 未着手 (汎用コード環境では不可、Hex Writer等が必要)
+   - 非日本語版: Hex Writerは確立済み (pomeg-letterbombers)。Switchアドレス調整あり
+   - 日本語版: Hex Writerは未確立 (メールワード/Box名コードの日本語対応が必要)
+   - E-Sh4rk CodeGeneratorに日本語Switch選択肢はあるがコード未実装 (2026-04時点)
+   - Hex Writer構築にはシステムA(直接ARM実行)のBox名コード6回実行 + メール破損が必要
 
 ## 非日本語版: Hex Writer汎用ペイロード
 
@@ -321,3 +325,46 @@ PRNG定数: 乗数=0x41C64E6D, 加数=0x00006073
 - 1文字=1ニブル, 2文字=1バイト, 8文字=4バイト/box
 - スペース=バイトスキップ
 - 例: `0A1B2C3D` → 0x0A, 0x1B, 0x2C, 0x3D
+
+### Hex Writer構築の全体構成 (Theocatic氏Gist / pomeg-letterbombers)
+
+構築順:
+1. **Box14 Exit Code**: Box14名=`U . o _ _ , o a`、壁紙設定
+2. **Exit Code Bootstrap**: 13回のBox名コード → Box14 Slot12にBeedrill生成
+3. **Hex Writer Bad Egg**: メール破損(Omanyte+Snorlax) + 6回Box名コード → Box14 Slot29
+4. **Crafting Table Bad Egg**: Hex Writerで書き込み → Box13 Slot11 (30slot分の作業領域を定義)
+5. **CPSR Reset Bulbasaur**: Hex Writerで書き込み → Box14 Slot18 (ステータスフラグリセット)
+6. **ScriptMover Egg**: Hex Writerで書き込み → Box14 Slot15 (Crafting Table→RamScriptコピー)
+7. **RamScript Writer**: Hex Writerで書き込み → Box14 Slot16 (r12をRamScriptアドレスに設定)
+
+推奨Box配置:
+```
+Box 13:
+-  -  -  -  -  -
+-  -  -  -  C  +    C=Crafting Table Bad Egg
++  +  +  +  +  +    +=作業領域(30slot、実行されない)
++  +  +  +  +  +
++  +  +  +  +  +
+
+Box 14:
++  +  +  +  +  +
++  +  +  +  +  E    E=Exit Code Bootstrap
+-  -  -  -  -  B    B=CPSR Reset Bulbasaur
+-  -  -  -  -  -
+-  -  -  -  W  -    W=Hex Writer Bad Egg (Slot29)
+```
+
+### RamScript技術詳細
+
+- RamScriptアドレス: FR/LG GBA版 0x02039A38、Emerald 0x0203ABBC
+- RamScriptはCRC16チェックサム付き (初期値=0x1121, 多項式=0x8408)
+- 構造: チェックサム(4B) + MapID/Group/Object(4B) + CallASM→ScriptMover + GoTo スクリプト領域 + end
+- ScriptMoverはBIOS CpuFastSet(SWI 0xC0000)でCrafting Tableからコピー(600バイト)
+
+### 日本語版Hex Writer構築への課題 (2026-04時点、未解決)
+
+1. **メール破損ワードの日本語版対応**: 非日本語版のOmanyte/Snorlax等のワードインデックスが日本語版かんたん会話リストで異なる → 各ハーフワードに対応する日本語ワードを個別計算する必要がある
+2. **Box名コード6回分の日本語版再計算**: SBC/STR/MOV等のARM命令を日本語Gen3文字エンコーディングで入力可能な文字列に変換する必要がある。日本語版はバイト値が豊富なため非日本語版より制約が少ない可能性がある
+3. **Switch版アドレス調整**: SBC初期オフセット(Box10 Slot2を指す0x2F40)のSwitch版での正確な値が必要
+4. **STRH/STRB問題の影響評価**: Hex Writer本体はSTR(ワード書き込み)だが、構築過程のBox名コードでSTRH/STRBを使用している箇所がSwitch版で問題になる可能性
+5. **RamScriptアドレスのSwitch版特定**: GBA版0x02039A38のSwitch版対応アドレスが不明

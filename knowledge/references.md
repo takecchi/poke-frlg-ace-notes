@@ -15,7 +15,8 @@
 
 ## ツール
 
-- FRLG ACE Code Generator (GBA版のみ対応): https://e-sh4rk.github.io/CodeGenerator/index_frlg.html
+- FRLG ACE Code Generator (非日本語Switch対応、日本語Switchは選択肢あるがコード未実装): https://e-sh4rk.github.io/CodeGenerator/index_frlg.html
+  - GitHub: https://github.com/E-Sh4rk/CodeGenerator
 - ACE Generator Docs: https://e-sh4rk.github.io/CodeGenerator/doc/index.html
 
 ## Wiki・百科事典
@@ -57,3 +58,6 @@
 
 - デテロニー氏 (Switch版メールバグ初期報告): https://x.com/detelony
 - アダン氏 (Switch版ACE拡散): https://x.com/GEN4pomeg
+- Sleipnir17氏 (非日本語版コード集): https://pastebin.com/VAgKwjwJ
+- Theocatic氏 (GBA/Switchアドレス差分、スクリプト環境): https://gist.github.com/Theocatic/39ed337ecd590b47fad14f791cf16bb5
+- it-is-final氏 (Exit Code Bootstrap): https://gist.github.com/it-is-final/0d409b6dee88daff81d0559b89a5f8d3
